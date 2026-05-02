@@ -3,38 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update System 2026</title>
+    <title>System Update 2026</title>
     <style>
-        body { background-color: #000; color: white; text-align: center; font-family: sans-serif; margin: 0; overflow: hidden; }
-        #start-btn { margin-top: 40vh; padding: 20px 40px; font-size: 24px; background: #25d366; border: none; color: white; border-radius: 10px; cursor: pointer; }
-        #scary-content { display: none; width: 100vw; height: 100vh; background: black; }
+        body { background-color: #000; color: white; text-align: center; font-family: sans-serif; margin: 0; overflow: hidden; touch-action: none; }
+        #start-btn { margin-top: 40vh; padding: 20px 40px; font-size: 24px; background: #25d366; border: none; color: white; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        #scary-content { display: none; width: 100vw; height: 100vh; background: black; position: relative; }
         img { width: 100%; height: 100%; object-fit: contain; }
-        #timer { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 50px; color: red; font-weight: bold; }
+        #timer { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 60px; color: red; font-weight: bold; }
     </style>
 </head>
 <body>
+
     <button id="start-btn">اضغط لتحديث النظام (إلزامي)</button>
+
     <div id="scary-content">
         <div id="timer">60</div>
-        <img src="https://i.ibb.co/X7888mP/momo.jpg">
-        <audio id="scream" src="https://www.myinstants.com/media/sounds/scary-scream-meme.mp3" loop></audio>
+        <img src="https://i.postimg.cc/mD4mFmPZ/1000117593.jpg">
+        <audio id="scream" src="https://www.soundjay.com/human/sounds/person-screaming-01.mp3" loop></audio>
     </div>
+
     <script>
         const btn = document.getElementById('start-btn');
         const content = document.getElementById('scary-content');
         const audio = document.getElementById('scream');
         const timerDisplay = document.getElementById('timer');
         let timeLeft = 60;
+        let lock = false;
+
+        // منع زر الرجوع في المتصفح
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+            if(lock) alert("⚠️ خطأ في النظام: لا يمكن الخروج أثناء التحديث!");
+        };
+
         btn.onclick = function() {
-            if (document.documentElement.requestFullscreen) { document.documentElement.requestFullscreen(); }
+            lock = true;
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+            
             btn.style.display = 'none';
             content.style.display = 'block';
             audio.play();
-            if (navigator.vibrate) { navigator.vibrate([500, 200, 500, 200, 500]); }
+
+            // منع محاولة إغلاق الصفحة (تظهر رسالة تأكيد)
+            window.onbeforeunload = function() {
+                return "هل أنت متأكد؟ قد يتلف النظام!";
+            };
+
             const countdown = setInterval(() => {
                 timeLeft--;
                 timerDisplay.innerText = timeLeft;
-                if (timeLeft <= 0) { clearInterval(countdown); alert("SYSTEM CRITICAL ERROR!"); }
+                
+                // اهتزاز عشوائي لإرباك الضحية
+                if (navigator.vibrate) navigator.vibrate(200);
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    lock = false;
+                    alert("تم اختراق الحماية بنجاح... وداعاً!");
+                    location.reload(); // إعادة تشغيل المقلب من جديد!
+                }
             }, 1000);
         };
     </script>
