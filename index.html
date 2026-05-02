@@ -13,12 +13,15 @@
     </style>
 </head>
 <body>
+
     <button id="start-btn">اضغط لتحديث النظام (إلزامي)</button>
+
     <div id="scary-content">
         <div id="timer">60</div>
-        <img src="https://i.postimg.cc/mD4mFmPZ/1000117593.jpg">
+        <img src="https://i.ibb.co/v4p0XmD/scary-face.jpg" alt="scary">
         <audio id="scream" src="https://www.soundjay.com/human/sounds/person-screaming-01.mp3" loop></audio>
     </div>
+
     <script>
         const btn = document.getElementById('start-btn');
         const content = document.getElementById('scary-content');
@@ -27,6 +30,7 @@
         let timeLeft = 60;
         let lock = false;
 
+        // منع زر الرجوع
         history.pushState(null, null, location.href);
         window.onpopstate = function () {
             history.go(1);
@@ -42,6 +46,7 @@
             content.style.display = 'block';
             audio.play();
 
+            // منع إغلاق الصفحة
             window.onbeforeunload = function() { return "System is updating..."; };
 
             const countdown = setInterval(() => {
@@ -51,7 +56,7 @@
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     lock = false;
-                    alert("VIRUS INJECTED SUCCESSFULLY!");
+                    alert("تم اختراق الحماية بنجاح!");
                     location.reload();
                 }
             }, 1000);
